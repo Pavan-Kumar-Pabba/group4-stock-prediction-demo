@@ -156,7 +156,7 @@ const Index = () => {
         {/* Market Overview Section - Can be expanded in future iterations */}
         <div className="py-4 text-center text-muted-foreground text-sm">
           <p>Market data is simulated for demonstration purposes.</p>
-          <p>© 2025 MarketWhisper - Stock Prediction Platform</p>
+          <p>© Pavan Kumar - Stock Prediction Platform (Demo)</p>
         </div>
       </main>
     </div>
