@@ -16,8 +16,8 @@ export function Navbar({ toggleTheme, isDarkMode }: NavbarProps) {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <div className="font-bold text-xl flex items-center">
-            <span className="text-primary">Market</span>
-            <span className="text-accent">Whisper</span>
+            <span className="text-primary">Grow</span>
+            <span className="text-accent">Up</span>
           </div>
         </div>
         
