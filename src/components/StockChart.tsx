@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Area, AreaChart, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import { Area, AreaChart, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, TooltipProps } from "recharts";
 import { ChartData } from "../types/stock";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +10,29 @@ interface StockChartProps {
   symbol: string;
   isLoading: boolean;
 }
+
+// Custom tooltip component for the chart
+const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
+  if (active && payload && payload.length) {
+    const value = payload[0].value;
+    const date = new Date(label);
+    const formattedDate = date.toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric'
+    });
+
+    return (
+      <div className="custom-tooltip bg-popover border border-border shadow-md rounded-md p-3">
+        <p className="font-medium">{formattedDate}</p>
+        <p className="text-lg font-bold">${value?.toFixed(2)}</p>
+        <p className="text-xs text-muted-foreground mt-1">Click to view details</p>
+      </div>
+    );
+  }
+  return null;
+};
 
 export function StockChart({ data, symbol, isLoading }: StockChartProps) {
   const [timeframe, setTimeframe] = useState<'7d' | '30d' | '3m' | '1y'>('30d');
@@ -132,12 +155,14 @@ export function StockChart({ data, symbol, isLoading }: StockChartProps) {
                   />
                   <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
                   <Tooltip 
-                    formatter={(value: number) => [`$${value.toFixed(2)}`, 'Price']}
-                    labelFormatter={(label) => new Date(label).toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
-                    })}
+                    content={<CustomTooltip />}
+                    cursor={{
+                      stroke: 'var(--border)',
+                      strokeWidth: 1,
+                      strokeDasharray: "4 4"
+                    }}
+                    wrapperStyle={{ outline: 'none' }}
+                    position={{ y: 0 }}
                   />
                   <Area 
                     type="monotone" 
@@ -145,6 +170,13 @@ export function StockChart({ data, symbol, isLoading }: StockChartProps) {
                     stroke={chartColor} 
                     fillOpacity={1} 
                     fill="url(#colorValue)" 
+                    activeDot={{ 
+                      r: 6, 
+                      stroke: 'var(--background)',
+                      strokeWidth: 2,
+                      fill: chartColor 
+                    }}
+                    isAnimationActive={true}
                   />
                 </AreaChart>
               </ResponsiveContainer>
